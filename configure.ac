@@ -29,13 +29,24 @@ AC_SUBST(MACHTYPE)
 
 OS=`uname`
 AC_SUBST(OS)
-if test "x$OS" = "xDarwin"
-then
-VARSTATIC=""
-AC_SUBST(VARSTATIC)
+if test "x$OS" = "xDarwin"; then
+    AC_ARG_ENABLE([static],
+                  AS_HELP_STRING([--enable-static], [Enable static linking]))
+    AS_IF([test "x$enableval" = "xyes"], [
+        VARSTATIC="-static"
+    ],
+        VARSTATIC=""
+    )
+    AC_SUBST(VARSTATIC)
 else
-VARSTATIC="-static"
-AC_SUBST(VARSTATIC)
+    AC_ARG_ENABLE([shared],
+                  AS_HELP_STRING([--enable-shared], [Enable shared linking]))
+    AS_IF([test "x$enableval" = "xyes"], [
+        VARSTATIC=""
+    ],
+        VARSTATIC="-static"
+    )
+    AC_SUBST(VARSTATIC)
 fi
 
 CXXFLAGS="$CXXFLAGS"
